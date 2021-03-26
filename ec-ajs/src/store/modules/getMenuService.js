@@ -10,6 +10,7 @@ const getMenuService = {
         showModal: false,
         orderNumber: "",
         orderETA: "",
+        orderInfo:[]
     },
     mutations: {
         SET_LOADING_STATUS(state, status) {

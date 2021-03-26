@@ -16,11 +16,10 @@
         </a>
       </div>
     </header>
-    <!--
-        <ShoppingIcon
+         <ShoppingIcon
             @showAllorder="showAllorder"
             class="cartImage"></ShoppingIcon>
-    -->
+
     <h1 class="ha par">Meny</h1>
     <p class="par" v-if="loading">Loading</p>
 
@@ -37,16 +36,16 @@
   </div>
 </template>
 <script>
-//import ShoppingIcon from "@/components/ShoppingIcon.vue";
+import ShoppingIcon from "@/components/ShoppingIcon.vue";
 import MenuItems from "@/components/MenuItems.vue";
-//import Myorder from "@/components/Myorder.vue";
+import MyOrder from "@/components/Myorder.vue";
 
 export default {
   name: "Menu",
   components: {
-    //ShoppingIcon,
+    ShoppingIcon,
     MenuItems,
-    //Myorder,
+    MyOrder,
   },
   props: {},
   async mounted() {
@@ -57,7 +56,7 @@ export default {
     return {
       shownOrder: false,
       loading: true,
-      menu: this.$store.state.menu.menu
+      //menu: this.$store.state.menu.menu
     };
   },
   computed: {
@@ -69,7 +68,7 @@ export default {
     },
     computed: {
       menu() {
-        return this.$store.state.menus
+        return this.$store.state.menu.menu
       },
 
       orderItems() {
