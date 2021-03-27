@@ -6,119 +6,20 @@ import Menu from "@/assets/data/menu.json";
 // exporting as const allows private variables and methods
 
 export const namespaced = true // ensures all mutations, actions and getters are namespaced under event.
-const getMenuService = {
+const manageMenu = {
     state: {
-        ActiveItemsId: 0,
-        total: 0,
-        menu:[
-            { id:1,title:"Bryggkaffe",desc:"Bryggd på månadens bönor.",price:39},
-        ],
-        cart: [],
-        showNav: false,
-        showModal: false,
-        orderNumber: "",
-        orderETA: "",
-        user:{
-            id: '1',
-            name: 'jons'
-        },
-        order:[],
-
+        //ActiveItemsId: 0,
+        menu:[ ],
     },
     mutations: {
-        SET_LOADING_STATUS(state, status) {
-            state.loadingStatus = status
-        },
-        SET_MENUS(state, menu) {
+       SET_MENUS(state, menu) {
             state.menu=menu
         },
         SET_MENU(state, menu) {
             state.menu.push(menu)
         },
-        SET_TOTAL(state, total){
-            state.total=total
-        },
-        showNav(state) {
-            state.showNav = true;
-        },
-        hideNav(state) {
-            state.showNav = false;
-            state.hideHome = true;
-        },
-        showModal(state) {
-            state.showModal = !state.showModal;
-        },
-        arrowUp(state, payload) {
-            const addOne = state.cart.find((item) => item.id === payload);
-            addOne.amount++;
-            state.total = state.total + addOne.price;
-        },
-        arrowDown(state, payload) {
-            const addOne = state.cart.find((item) => item.id === payload);
-            if (addOne.amount > 1) {
-                addOne.amount--;
-                state.total = state.total - addOne.price;
-            } else {
-                state.cart = state.cart.filter((item) => item.id !== addOne.id);
-                state.total = state.total - addOne.price;
-            }
-        },
-        addToCart(state, payload) {
-            let addItem = state.menu.filter((item) => item.id === payload);
-            let amount = { amount: "" };
-            let cartObject = { ...addItem[0], ...amount };
-
-            if (state.cart.find((item) => item.id === cartObject.id)) {
-                cartObject.amount += 1;
-            } else {
-                state.total = state.total + cartObject.price;
-                state.cart.push(cartObject);
-                cartObject.amount += 1;
-            }
-        },
-        generateOrderNumber(state, payload) {
-            state.orderNumber = payload;
-        },
-        generateETA(state, payload) {
-            state.orderETA = payload;
-        },
-        cartTotal(state){
-            state.cart.length;
-        },
-        cartTotalRemove(state){
-            state.cart=null;
-        }
     },
     actions:{
-        showNav({ commit }) {
-            commit("showNav");
-        },
-        hideNav({ commit }) {
-            commit("hideNav");
-        },
-        showModal({ commit }) {
-            commit("showModal");
-        },
-        addToCart(context, payload) {
-            context.commit("addToCart", payload);
-        },
-        cartTotal(context) {
-            context.commit("cartTotal");
-        },
-        cartTotalRemove(context) {
-            context.commit("cartTotalRemove");
-        },
-        arrowDown(context, payload) {
-            context.commit("arrowDown", payload);
-        },
-        async generateOrderNumber(context) {
-            const orderNumber = await Modules.generateOrderNr();
-            context.commit("generateOrderNumber", orderNumber);
-        },
-        async generateETA({ commit }) {
-            const orderETA = await Modules.generateETA();
-            commit("generateETA", orderETA);
-        },
         async getMenuItems({ commit }) {
             const response = await fetch("http://localhost:5000/api/beans/");
             const data = await response.json();
@@ -142,7 +43,6 @@ const getMenuService = {
             })
         },
         // Fetch a single menu
-
         fetchMenu({ commit, getters, dispatch }, id) {
             // access getters
             var menu = getters.getMenuByID(id) // try to find this id (saves API call)
@@ -187,5 +87,5 @@ const getMenuService = {
         }
     }
 }
-export default getMenuService;
+export default manageMenu;
 

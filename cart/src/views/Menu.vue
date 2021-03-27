@@ -17,12 +17,13 @@
       </div>
     </header>
     <MyOrder v-bind:visible="shownOrder"></MyOrder>
-    <MenuItems
+    <MenuItems v-if="menu.menu"
         :menu="item"
         v-for="item in menu.menu"
         :key="item.id"
-        @addNewItem="addNewItem(item)">
-    </MenuItems>
+        @addNewItem="$store.dispatch('addToCart(item)')">
+      <!-- addItemToCart(item)-->
+    </MenuItems>?
     <img src="@/assets/graphics/graphics-footer.svg" alt="footer" />
   </div>
 </template>
@@ -49,8 +50,8 @@ export default {
     this.loading = false;
   },
   methods: {
-    addNewItem(prod) {
-      let changing = this.menu.find(
+    addItemToCart(prod) {
+      let changing = this.$store.cart.find(
           (changing) => changing.id === prod.id
       );
       let value = { value: "" };
@@ -58,7 +59,7 @@ export default {
       if (this.orderItems.find((element) => element.id === cartItem.id)) {
         cartItem.value += 1;
       } else {
-        this.$root.total = this.$root.total + cartItem.price;
+        this.$store.state.total = this.$root.total + cartItem.price;
         this.$root.orderInfo.push(cartItem);
         cartItem.value++;
       }
