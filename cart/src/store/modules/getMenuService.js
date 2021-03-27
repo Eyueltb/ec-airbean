@@ -10,7 +10,9 @@ const getMenuService = {
     state: {
         ActiveItemsId: 0,
         total: 0,
-        menu:[],
+        menu:[
+            { id:1,title:"Bryggkaffe",desc:"Bryggd på månadens bönor.",price:39},
+        ],
         cart: [],
         showNav: false,
         showModal: false,
@@ -20,11 +22,15 @@ const getMenuService = {
             id: '1',
             name: 'jons'
         },
+        order:[],
 
     },
     mutations: {
         SET_LOADING_STATUS(state, status) {
             state.loadingStatus = status
+        },
+        SET_MENUS(state, menu) {
+            state.menu=menu
         },
         SET_MENU(state, menu) {
             state.menu.push(menu)
@@ -116,10 +122,11 @@ const getMenuService = {
         async getMenuItems({ commit }) {
             const response = await fetch("http://localhost:5000/api/beans/");
             const data = await response.json();
-            commit("SET_MENU", data.menu);
+            console.log(data+" "+data.menu);
+            commit("SET_MENUS",  data.menu);//data["menu"]
             commit("SET_TOTAL",data.menu.length)
         },
-        //using axios
+        //using axios-fetchMenus
         fetchMenus(context) {
             // take in context, contains all properties of vuex store
             context.commit('SET_LOADING_STATUS', 'loading')
@@ -161,7 +168,7 @@ const getMenuService = {
             }
         },
         //This is using fetch with exception
-        async getMenu(context) {
+        async getMenus(context) {
             const url = "http://localhost:5000/api/beans";
             fetch(url, {
                 method: "GET",
