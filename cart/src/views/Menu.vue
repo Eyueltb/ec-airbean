@@ -24,10 +24,6 @@
         @addNewItem="addAnItemToCart(item)">
       <!-- addItemToCart(item)-->
     </MenuItems>
-    {{user.user.name}}
-    {{getUser}}
-    {{itemLength}}
-    <!--{{getMenuByID(2)}} -->
     <img src="@/assets/graphics/graphics-footer.svg" alt="footer" />
   </div>
 </template>
@@ -49,8 +45,8 @@ export default {
       shownOrder: false,
     };
   },
-  created() {
-    this.$store.dispatch("getMenus");
+  async created() {
+    await this.$store.dispatch("getMenus");
     this.loading = false;
   },
   methods: {
