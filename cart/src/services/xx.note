@@ -1,0 +1,144 @@
+const url='http://localhost:5000/api/beans';
+
+export async function getMenus(){
+    return (await fetch(url)).json();
+}
+
+const reqGet=new Request(url,{
+    method: 'GET',
+    headers: { Accept: 'application/json','Content-Type': 'application/json' },
+});
+
+const reqGetA={
+    method: 'GET',
+    headers: { Accept: 'application/json','Content-Type': 'application/json' },
+};
+
+const reqPost=new Request(url, {
+    method: 'POST',//or 'PUT'
+    headers: { Accept: 'application/json','Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+});
+
+const respGet=await fetch(url, {
+    method: 'GET',
+    mode: 'cors', // no-cors, *cors, same-origin
+    withCredentials: false, // this is the default
+    headers: { Accept: 'application/json','Content-Type': 'application/json' },
+
+});
+
+
+const respPost = await fetch(url, {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: { Accept: 'application/json','Content-Type': 'application/json' },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+});
+
+export default {
+    async getMenus(url='' ) {
+        return (await fetch(reqGet)).json();
+        //return await respGet.json();
+    },
+    async getMenuA(url='',data={} ) {
+        return (await fetch(url,reqGet)).json();
+    },
+}
+
+
+
+import MenuService from '@/services/MenuService.js'
+
+// exporting as const allows private variables and methods
+
+export const namespaced = true // ensures all mutations, actions and getters are namespaced under event.
+const manageMenu = {
+    state: {
+        //ActiveItemsId: 0,
+        menu:[ ],
+    },
+    mutations: {
+       SET_MENUS(state, menu) {
+            state.menu=menu
+        },
+        SET_MENU(state, menu) {
+            state.menu.push(menu)
+        },
+    },
+    actions:{
+        async getMenuItems({ commit }) {
+            const response = await fetch("http://localhost:5000/api/beans/");
+            const data = await response.json();
+            console.log(data+" "+data.menu);
+            commit("SET_MENUS",  data.menu);//data["menu"]
+            commit("SET_TOTAL",data.menu.length)
+        },
+        //using axios-fetchMenus
+        fetchMenus(context) {
+            // take in context, contains all properties of vuex store
+            context.commit('SET_LOADING_STATUS', 'loading')
+            MenuService.getMenus() .then(resp => {
+                context.commit("SET_MENU", resp.data.menu);
+                console.log(resp.data.menu);
+            }).catch(error => {
+               console.log('getMenus() error.message =>', error.message) // logs error in details (good)
+            })
+        },
+        /*
+        // Fetch a single menu
+        fetchMenu({ commit, getters }, id) {
+            // access getters
+            var menu = getters.getMenuByID(id) // try to find this id (saves API call)
+            if (menu) {
+                // if found, set it
+                commit('SET_MENU', menu)
+            } else {
+                // else go find it
+                MenuService.getMenu(id) // call getMenu, pass in id
+                    .then(resp => {
+                        console.log('getEvent() resp.data =>', resp.data)
+                        commit('SET_MENU', resp.data) // set menu to data
+                    })
+                    .catch(error => {
+                        console.log('getMenu() error.resp =>', error.resp)
+                    })
+            }
+        },
+        */
+        //This is using fetch with exception
+        async getMenus(context) {
+            const url = "http://localhost:5000/api/beans";
+            fetch(url, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            })
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data) {
+                        context.commit("SET_MENU",data ); //or resp.data //data["menus"]
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+
+        }
+    },
+    getters:{
+        menuLength: state=>{
+            return state.menu.length
+       },
+        /*
+        getMenuByID:state=>id=>{
+            return state.menu.filter(ele=>ele.id==id)
+       },
+        */
+
+    }
+}
+export default manageMenu;
