@@ -17,18 +17,22 @@
       </div>
     </header>
     <MyOrder v-bind:visible="shownOrder"></MyOrder>
-    <MenuItems v-if="menu.menu"
+    <MenuItems
         :menu="item"
-        v-for="item in menu.menu"
+        v-for="item in menu.menus"
         :key="item.id"
-        @addNewItem="$store.dispatch('addToCart(item)')">
+        @addNewItem="addAnItemToCart(item)">
       <!-- addItemToCart(item)-->
-    </MenuItems>?
+    </MenuItems>
+    {{user.user.name}}
+    {{getUser}}
+    {{itemLength}}
+    <!--{{getMenuByID(2)}} -->
     <img src="@/assets/graphics/graphics-footer.svg" alt="footer" />
   </div>
 </template>
 <script>
-import {mapState} from "vuex"
+import {mapState, mapGetters} from "vuex"
 import ShoppingIcon from "@/components/ShoppingIcon.vue";
 import MenuItems from "@/components/MenuItems.vue";
 import MyOrder from "@/components/Myorder.vue";
@@ -46,10 +50,13 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("getMenuItems");
+    this.$store.dispatch("getMenus");
     this.loading = false;
   },
   methods: {
+    addAnItemToCart(prod){
+      this.$store.dispatch("addToCart",prod);
+    },
     addItemToCart(prod) {
       let changing = this.$store.cart.find(
           (changing) => changing.id === prod.id
@@ -69,12 +76,12 @@ export default {
     },
   },
   //To map computed property to state
-  computed: mapState({
-    menu:'menu',
-    cart:'cart',
-    user:'user',
-    order:'order'
-  })
+  computed: {
+    getUser(){return  this.$store.state.user.user},
+    ...mapGetters(['getMenuByID','menuLength']),
+    ...mapState(['menu','cart','user','order'])
+  }
+
 };
 </script>
 <style scoped>

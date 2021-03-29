@@ -6,11 +6,17 @@ const manageOrder = {
         orderNumber: "",
         orderETA: "",
         total: 0,
+        created:"",
+        userUuid: "",
+
 
     },
     mutations: {
         SET_TOTAL(state, total){
             state.total=total
+        },
+        ADD_CART(state, item){
+            state.cart.push(item);
         },
         arrowUp(state, payload) {
             const addOne = state.cart.find((item) => item.id === payload);
@@ -27,11 +33,12 @@ const manageOrder = {
                 state.total = state.total - addOne.price;
             }
         },
-        addToCart(state, payload) {
-            let addItem = state.menu.filter((item) => item.id === payload);
+        addToCart({state} , payload) {
+            //rootState
+            let addItem=state.menus.filter((item) => item.id === payload)
             let amount = { amount: "" };
             let cartObject = { ...addItem[0], ...amount };
-
+            console.log(addItem +" "+ cartObject);
             if (state.cart.find((item) => item.id === cartObject.id)) {
                 cartObject.amount += 1;
             } else {
@@ -54,8 +61,9 @@ const manageOrder = {
         }
     },
     actions:{
-        addToCart(context, payload) {
-            context.commit("addToCart", payload);
+        addToCart({commit}, payload) {
+
+           commit("addToCart", payload);
         },
         cartTotal(context) {
             context.commit("cartTotal");
@@ -66,6 +74,7 @@ const manageOrder = {
         arrowDown(context, payload) {
             context.commit("arrowDown", payload);
         },
+        /*
         async generateOrderNumber(context) {
             const orderNumber = await Modules.generateOrderNr();
             context.commit("generateOrderNumber", orderNumber);
@@ -74,6 +83,12 @@ const manageOrder = {
             const orderETA = await Modules.generateETA();
             commit("generateETA", orderETA);
         },
+        */
+    },
+    getters:{
+        cartLength: state=>{
+            return state.cart.length
+        }
     }
 };
 export default manageOrder;

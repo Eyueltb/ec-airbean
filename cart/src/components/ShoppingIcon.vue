@@ -5,7 +5,7 @@
     >
       <img  src="@/assets/graphics/clock-padlock.svg"  alt="bags" />
       <div class="number">
-        {{ shoppingCart.length }}
+       <!-- {{ shoppingCart.length }} -->
       </div>
     </a>
   </div>
