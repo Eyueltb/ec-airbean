@@ -25,7 +25,8 @@
 
     <!-- <Myorder v-bind:visible="shownOrder"></Myorder>-->
     <MenuItems
-        :menu="item" v-for="item in menuItems"
+        :menu="item"
+        v-for="item in menu.menus"
         :key="item.id"
         @addNewItem="addNewItem(item)">
       {{item.desc}}
@@ -48,34 +49,27 @@ export default {
     MyOrder,
   },
   props: {},
-  async mounted() {
-    await this.$store.dispatch("getMenu");
+  async created() {
+    await this.$store.dispatch("getMenus");
     this.loading = false;
   },
   data() {
     return {
       shownOrder: false,
       loading: true,
-      //menu: this.$store.state.menu.menu
-    };
+     };
   },
   computed: {
-    menuItems() {
-      return this.$store.state.menu.menu
-    },
-    methods: {
-
-    },
-    computed: {
-      menu() {
-        return this.$store.state.menu.menu
-      },
-
-      orderItems() {
-        return this.$root.orderInfo;
-      },
-    },
+    getUser(){return  this.$store.state.user.user},
+    ...mapGetters(['getMenuByID','menuLength']),
+    ...mapState(['menu','cart','user','order'])
+  },
+  methods: {
+    addNewItem(prod){
+      this.$store.dispatch("addToCart",prod);
+    }
   }
+
 };
 </script>
 <style scoped >
