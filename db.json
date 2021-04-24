@@ -1,4 +1,27 @@
 {
   "users": [],
-  "orders": []
+  "orders": [],
+  "menu":[
+      {"id":1,"title":"Bryggkaffe","desc":"Bryggd pÃ¥ mÃ¥nadens bÃ¶nor.","price":39},
+      {
+        "id":2,
+        "title":"CaffÃ¨ Doppio",
+        "desc":"Bryggd pÃ¥ mÃ¥nadens bÃ¶nor.",
+        "price":49
+      },
+      {"id":3,"title":"Cappuccino","desc":"Bryggd pÃ¥ mÃ¥nadens bÃ¶nor.","price":49},
+      {
+        "id":4,
+        "title":"Latte Macchiato",
+        "desc":"Bryggd pÃ¥ mÃ¥nadens bÃ¶nor.",
+        "price":49
+      },
+      {
+        "id":5,
+        "title":"Kaffe Latte",
+        "desc":"Bryggd pÃ¥ mÃ¥nadens bÃ¶nor.",
+        "price":54
+      },
+      {"id":6,"title":"Cortado","desc":"Bryggd pÃ¥ mÃ¥nadens bÃ¶nor.","price":39}
+    ]
   }
